@@ -1,4 +1,10 @@
 {
+    "exclude": [
+        "./test"
+    ],
+    "include": [
+        "./src"
+    ],
     "compilerOptions": {
 
         /* Base Options: */
