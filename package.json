@@ -1,0 +1,29 @@
+{
+  "name": "filefly-logging",
+  "version": "1.0.0",
+  "description": "Winston-based logging for the Filefly file server.",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/The-Filefly-Project/logging.git"
+  },
+  "author": "4Sight",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/The-Filefly-Project/logging/issues"
+  },
+  "homepage": "https://github.com/The-Filefly-Project/logging#readme",
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "winston": "^3.12.0",
+    "winston-daily-rotate-file": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.25",
+    "typescript": "^5.4.2"
+  }
+}
