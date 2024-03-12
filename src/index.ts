@@ -9,8 +9,6 @@ import 'winston-daily-rotate-file'
 
 // Types ======================================================================
 
-type LogLevel = 'critical' | 'error' | 'warn' | 'notice' | 'info' | 'http' | 'debug'
-
 interface LogConfig {
     /** Logging level applied to the console and log files. */
     loggingLevel: LogLevel
