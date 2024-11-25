@@ -1,2 +1,2 @@
 # logging
- Winston console + file logging module
+Winston console + file logging module
