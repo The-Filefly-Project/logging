@@ -11,7 +11,7 @@
         "postinstall": "tsc"
     },
     "keywords": [],
-    "author": "",
+    "author": "4S1ght",
     "license": "MIT",
     "devDependencies": {
         "@types/node": "^22.9.3",
