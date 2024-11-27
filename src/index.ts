@@ -162,7 +162,7 @@ export default class LoggerInstance {
 
         const lineNumber = cols[cols.length-2]
         const colNumber = cols[cols.length-1]
-        return `:${lineNumber}${colNumber ? `:${colNumber}` : ''}`
+        return `${lineNumber}${colNumber ? `:${colNumber}` : ''}`
 
 
     }
