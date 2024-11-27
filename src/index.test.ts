@@ -15,6 +15,7 @@ test('init', async () => {
         maxLogFileSize: 10_000_000,
         maxLogFileCount: 10,
         dirname: dirname,
+        stackDepth: 3
     })
 
     const log = LoggerInstance.getScope(import.meta.url)

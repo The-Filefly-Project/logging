@@ -22,7 +22,9 @@ export interface LoggerInit {
     /** Determines the max number of log files kept track of. This can be a number of files or number of days. If using days, add 'd' as the suffix. */
     maxLogFileCount: number | string
     /** Project root. */
-    dirname: string
+    dirname: string,
+    /** Stack depth used for getting the file and line number where crits and errors originated. */
+    stackDepth: number
 }
 
 // Module =========================================================================================
@@ -62,10 +64,10 @@ export default class LoggerInstance {
 
     private static formats = {
         console: winston.format.printf(x => {
-            return `${c.grey(x.timestamp)} ${this.levelsColored[x.level]} ${c.grey("["+x["0"]+"]")} ${this.criticalLevels[x.level] ? c.red(x.message) : x.message}`
+            return `${c.grey(x.timestamp)} ${this.levelsColored[x.level]} ${c.grey(`[${x[0]}${x[1] ? `:${x[1]}` : ''}]`)} ${this.criticalLevels[x.level] ? c.red(x.message) : x.message}`
         }),
         file: winston.format.printf(x => {
-            return `${x.timestamp} ${this.levels[x.level]} [${x["0"]}] ${x.message}`.replace(/\x1B\[\d+m/g, '')
+            return `${x.timestamp} ${this.levels[x.level]} [${x[0]}${x[1] ? `:${x[1]}` : ''}] ${x.message}`.replace(/\x1B\[\d+m/g, '')
         })
     }
 
@@ -130,14 +132,35 @@ export default class LoggerInstance {
         }).join(' ')
 
         return {
-            crit:   (...message: (string|object|Error)[]) => this.winston.crit  (mapMessage(message), [relativeScope]),
-            error:  (...message: (string|object|Error)[]) => this.winston.error (mapMessage(message), [relativeScope]),
+            crit:   (...message: (string|object|Error)[]) => this.winston.crit  (mapMessage(message), [relativeScope, this.getLogLineNumber()]),
+            error:  (...message: (string|object|Error)[]) => this.winston.error (mapMessage(message), [relativeScope, this.getLogLineNumber()]),
             warn:   (...message: (string|object|Error)[]) => this.winston.warn  (mapMessage(message), [relativeScope]),
             notice: (...message: (string|object|Error)[]) => this.winston.notice(mapMessage(message), [relativeScope]),
             info:   (...message: (string|object|Error)[]) => this.winston.info  (mapMessage(message), [relativeScope]),
             http:   (...message: (string|object|Error)[]) => this.winston.http  (mapMessage(message), [relativeScope]),
             debug:  (...message: (string|object|Error)[]) => this.winston.debug (mapMessage(message), [relativeScope]),
         }
+
+    }
+
+    /**
+     * Returns the line number at which the crit/error was made.
+     * This is only done for error logs due to performance issues caused by
+     * gathering and parsing the error stack trace.
+     */
+    private static getLogLineNumber() {
+
+        const stack = new Error().stack
+        const lines = stack!.split('\n')
+        const line = lines[this.config.stackDepth]
+
+        // Catch possible parsing errors
+        if (!line) return undefined
+
+        const cols = line.split(':')
+        if (cols[1] && cols[2]) return `${cols[1]}:${cols[2]}`
+        if (cols[1]) return `${cols[1]}`
+        return undefined
 
     }
 
