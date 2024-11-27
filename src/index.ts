@@ -158,9 +158,12 @@ export default class LoggerInstance {
         if (!line) return undefined
 
         const cols = line.split(':')
-        if (cols[1] && cols[2]) return `${cols[1]}:${cols[2]}`
-        if (cols[1]) return `${cols[1]}`
-        return undefined
+        if (cols.length < 3) return undefined
+
+        const lineNumber = cols[cols.length-2]
+        const colNumber = cols[cols.length-1]
+        return `:${lineNumber}${colNumber ? `:${colNumber}` : ''}`
+
 
     }
 
