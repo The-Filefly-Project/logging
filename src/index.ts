@@ -161,7 +161,7 @@ export default class LoggerInstance {
         if (cols.length < 3) return undefined
 
         const lineNumber = cols[cols.length-2]
-        const colNumber = cols[cols.length-1]
+        const colNumber = cols[cols.length-1].replace(/\(|\)/g, '')
         return `${lineNumber}${colNumber ? `:${colNumber}` : ''}`
 
 
